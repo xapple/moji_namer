@@ -1,0 +1,6 @@
+name: moji
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - openai
