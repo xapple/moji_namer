@@ -5,6 +5,14 @@
 Written by Lucas Sinclair.
 
 A script to rename the bitmoji pictures.
+
+
+Usage:
+
+    cd ~/rp/zz_forks/moji_namer/moji_namer/
+    ipython -i moji_namer.py -- /home/paul/rp/zz_forks/label --dry-run
+    ipython -i moji_namer.py -- /home/paul/rp/zz_forks/label
+
 """
 
 # Modules #
@@ -51,14 +59,16 @@ def request_image_name(client: OpenAI,
         "Give a concise, descriptive base name for this image. "
         "Return only the name, nothing else."
     )
-    msg = [{"role": "system", "content": system_prompt},
-            {
-                "role": "user",
-                "content": [
-                    {"type": "input_text", "text": user_text},
-                    {"type": "input_image", "image_url": {"url": data_url}},
-                ],
-            }]
+    msg = [
+        {"role": "system", "content": system_prompt},
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": user_text},
+                {"type": "image_url", "image_url": {"url": data_url}},
+            ],
+        }
+    ]
     resp = client.chat.completions.create(
         model=model,
         messages=msg,
@@ -107,7 +117,8 @@ def main(directory_path: str, model: str, dry_run: bool) -> None:
             suggested = request_image_name(client, str(src), model=model)
         except Exception as exc:
             print(f"[skip] {src.name}: API error: {exc}")
-            continue
+            raise exc
+            # continue
 
         slug = sanitize_to_slug(suggested)
         if not slug:
