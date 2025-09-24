@@ -26,14 +26,14 @@ from pathlib import Path
 from typing import List
 from openai import OpenAI
 
-############################################################################
-# OpenAI client
+
 def get_openai_client() -> OpenAI:
     """
     Create an OpenAI client. Reads the API key from the environment.
     Requires the environment variable `OPENAI_API_KEY` to be set.
     """
     return OpenAI()
+
 
 def encode_image_as_data_url(image_path: str) -> str:
     """Return a data URL for a local image file suitable for vision input."""
@@ -44,9 +44,10 @@ def encode_image_as_data_url(image_path: str) -> str:
         b64 = base64.b64encode(handle.read()).decode("utf-8")
     return f"data:{mime_type};base64,{b64}"
 
-def request_image_name(client: OpenAI,
-                       image_path: str,
-                       model: str = "gpt-4o-mini") -> str:
+
+def request_image_name(
+    client: OpenAI, image_path: str, model: str = "gpt-4o-mini"
+) -> str:
     """Ask the model to generate a short, file-safe base name for the image."""
     data_url = encode_image_as_data_url(image_path)
     system_prompt = (
@@ -67,16 +68,17 @@ def request_image_name(client: OpenAI,
                 {"type": "text", "text": user_text},
                 {"type": "image_url", "image_url": {"url": data_url}},
             ],
-        }
+        },
     ]
     resp = client.chat.completions.create(
         model=model,
         messages=msg,
-        temperature = 0.2,
-        max_tokens = 20,
+        temperature=0.2,
+        max_tokens=20,
     )
     text = resp.choices[0].message.content.strip()
     return text
+
 
 def sanitize_to_slug(text: str, max_length: int = 40) -> str:
     """Sanitize arbitrary text to a safe snake_case slug."""
@@ -85,8 +87,10 @@ def sanitize_to_slug(text: str, max_length: int = 40) -> str:
     text = re.sub(r"[\s\-]+", "_", text)
     text = re.sub(r"_+", "_", text)
     text = text.strip("_")
-    if not text: text = "image"
+    if not text:
+        text = "image"
     return text[:max_length]
+
 
 def make_unique_path(directory: Path, base_name: str, extension: str) -> Path:
     """Return a non-colliding Path by appending a numeric suffix if needed."""
@@ -97,7 +101,7 @@ def make_unique_path(directory: Path, base_name: str, extension: str) -> Path:
         counter += 1
     return candidate
 
-############################################################################
+
 def main(directory_path: str, model: str, dry_run: bool) -> None:
     """Rename the pictures in the directory using ChatGPT vision."""
     directory = Path(directory_path).expanduser().resolve()
@@ -137,7 +141,6 @@ def main(directory_path: str, model: str, dry_run: bool) -> None:
             print(f"[renamed] {src.name} -> {dest.name}")
 
 
-############################################################################
 if __name__ == "__main__":
     # Make an argparse object
     desc = "Rename images using ChatGPT vision."
