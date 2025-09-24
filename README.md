@@ -14,6 +14,10 @@ We have a directory of about 200 such images, and we would like to rename them a
 
 ## Call
 
+Set the API Key:
+
+    export OPENAI_API_KEY="<place key here>"
+
 This is how you call the script:
 
     $ ./moji_namer ~/path/to/directory/with/pictures/

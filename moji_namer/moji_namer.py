@@ -9,9 +9,9 @@ A script to rename the bitmoji pictures.
 
 Usage:
 
-    cd ~/rp/zz_forks/moji_namer/moji_namer/
-    ipython -i moji_namer.py -- /home/paul/rp/zz_forks/label --dry-run
-    ipython -i moji_namer.py -- /home/paul/rp/zz_forks/label
+    cd /path/to/moji_namer/moji_namer/
+    ipython -i moji_namer.py -- ~/directory/with/pictures/
+    ipython -i moji_namer.py -- ~/directory/with/pictures/ --dry-run
 
 """
 
@@ -51,10 +51,12 @@ def request_image_name(
     """Ask the model to generate a short, file-safe base name for the image."""
     data_url = encode_image_as_data_url(image_path)
     system_prompt = (
-        "You name image files succinctly for easy search."
-        "Respond with a single short snake_case name, no spaces, lowercase, "
-        "ASCII letters/numbers/underscores only. 3-6 words, max 42 characters. "
-        "Do not include the file extension or any punctuation beyond underscores."
+        "You name image files succinctly for easy search. "
+        "Respond with a single short snake_case name, no spaces, "
+        "lowercase, ASCII letters/numbers/underscores only. "
+        "3-6 words, max 42 characters. "
+        "Do not include the file extension or any punctuation "
+        "beyond underscores."
     )
     user_text = (
         "Give a concise, descriptive base name for this image. "
