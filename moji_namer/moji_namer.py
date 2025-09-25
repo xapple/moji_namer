@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Written by Lucas Sinclair.
+Written by Lucas Sinclair and Paul Rougieux.
 
 A script to rename the all the bitmoji pictures.
 
