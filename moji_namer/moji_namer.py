@@ -4,15 +4,16 @@
 """
 Written by Lucas Sinclair.
 
-A script to rename the bitmoji pictures.
+A script to rename the all the bitmoji pictures.
 
+Example usage:
 
-Usage:
+    $ cd ~/repos/moji_namer/
+    $ ipython -i moji_namer/moji_namer.py -- /directory/with/pictures/
 
-    cd /path/to/moji_namer/moji_namer/
-    ipython -i moji_namer.py -- ~/directory/with/pictures/
-    ipython -i moji_namer.py -- ~/directory/with/pictures/ --dry-run
+Or test it first with a dry-run:
 
+    $ ipython -i moji_namer.py -- /directory/with/pictures/ --dry-run
 """
 
 # Modules #
