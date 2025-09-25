@@ -24,6 +24,7 @@ import mimetypes
 import os
 import re
 from pathlib import Path
+import time
 from typing import List
 from openai import OpenAI
 
@@ -55,13 +56,15 @@ def request_image_name(
         "You name image files succinctly for easy search. "
         "Respond with a single short snake_case name, no spaces, "
         "lowercase, ASCII letters/numbers/underscores only. "
-        "3-6 words, max 42 characters. "
+        "7-11 words, max 80 characters. "
         "Do not include the file extension or any punctuation "
-        "beyond underscores."
+        "beyond underscores. "
+        "Avoid saying it's a picture of a cartoon character or a bitmoji."
     )
     user_text = (
         "Give a concise, descriptive base name for this image. "
-        "Return only the name, nothing else."
+        "Return only the name, nothing else. Avoid saying it's a"
+        "picture of a cartoon character or a bitmoji, we know that."
     )
     msg = [
         {"role": "system", "content": system_prompt},
@@ -77,13 +80,13 @@ def request_image_name(
         model=model,
         messages=msg,
         temperature=0.2,
-        max_tokens=20,
+        max_tokens=25,
     )
     text = resp.choices[0].message.content.strip()
     return text
 
 
-def sanitize_to_slug(text: str, max_length: int = 40) -> str:
+def sanitize_to_slug(text: str, max_length: int = 84) -> str:
     """Sanitize arbitrary text to a safe snake_case slug."""
     text = text.strip().lower()
     text = re.sub(r"[^a-z0-9_\-\s]+", "", text)
@@ -122,10 +125,11 @@ def main(directory_path: str, model: str, dry_run: bool) -> None:
         src = Path(picture)
         try:
             suggested = request_image_name(client, str(src), model=model)
+            time.sleep(1)
         except Exception as exc:
             print(f"[skip] {src.name}: API error: {exc}")
             raise exc
-            # continue
+            continue
 
         slug = sanitize_to_slug(suggested)
         if not slug:
