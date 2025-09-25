@@ -4,9 +4,9 @@
 
 ## Example
 
-Given a simple JPEG file of say 512x512 pixels describing a scene, we would like to give it a relevant name such as `ready_to_eat_fork_knife.jpg`.
-
 ![example.jpg](example.jpg)
+
+Given a simple JPEG file of say 512x512 pixels describing a scene, we would like to give it a relevant name such as `ready_to_eat_fork_knife.jpg`.
 
 ## Use case
 
